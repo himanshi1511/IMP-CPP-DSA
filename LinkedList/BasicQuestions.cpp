@@ -1,153 +1,88 @@
-#include <iostream>
+
+#include <bits/stdc++.h>
+
 using namespace std;
 
-class Node {
+class ListNode
+{
 public:
-    int data;
-    Node* next;
-
-    Node() {
-        data = 0;
-        next = nullptr;
-    }
-
-    Node(int data) {
-        this->data = data;
-        this->next = nullptr;
-    }
+  int val;
+  ListNode *next;
+  ListNode(int x)
+  {
+    val = x;
+    next = NULL;
+  }
 };
 
-class LinkedList {
-private:
-    Node* head;
+void PrintList(ListNode *head) // Function to print the LinkedList
+{
+  ListNode *curr = head;
+  for (; curr != NULL; curr = curr->next)
+    cout << curr->val << "->";
+  cout << "null" << endl;
+}
 
-public:
-    LinkedList() { head = nullptr; }
+ListNode *InsertatFirst(int value, ListNode *head)
+{
 
-    ~LinkedList() {
-        Node* current = head;
-        Node* nextNode = nullptr;
-        while (current != nullptr) {
-            nextNode = current->next;
-            delete current;
-            current = nextNode;
-        }
-    }
+  ListNode *newnode = new ListNode(value);
 
-    void setHead(Node* newHead) {
-        head = newHead;
-    }
+  newnode->next = head;
 
-    Node* getHead() const {
-        return head;
-    }
+  head = newnode;
+  return head;
+}
 
-    void insertNode(int data) {
-        Node* newNode = new Node(data);
+ListNode *BuildLinkedList(vector<int> &arr)
+{
+  ListNode *head = nullptr;
 
-        if (head == nullptr) {
-            head = newNode;
-            return;
-        }
+  for (int i = arr.size() - 1; i >= 0; --i)
+  {
+    ListNode *newNode = new ListNode(arr[i]);
+    newNode->next = head;
+    head = newNode;
+  }
 
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
+  return head;
+}
 
+ListNode *insertAtEnd(ListNode *head, int x)
+{
+  // Your code here
+  ListNode *newNode = new ListNode(x);
 
-    void printList() const {
-        Node* temp = head;
+  if (head == NULL)
+  {
+    return newNode;
+  }
+  Node *temp = head;
+  while (temp->next != NULL)
+  {
+    temp = temp->next;
+  }
 
-        if (head == nullptr) {
-            cout << "List empty" << endl;
-            return;
-        }
+  temp->next = newNode;
+  return head;
+}
+int main()
+{
+  int n;
+  cout << "Enter number of elements: ";
+  cin >> n;
+  vector<int> arr;
+  cout << "Enter list of elements: ";
+  for (int i = 0; i < n; i++)
+  {
+    int element;
+    cin >> element;
+    arr.push_back(element);
+  }
 
-        while (temp != nullptr) {
-            cout << temp->data << " ";
-            temp = temp->next;
-        }
-        cout << endl;
-    }
+  ListNode *head = BuildLinkedList(arr);
+  cout << "LinkedList before inserting 0 at beginning : " << endl;
+  PrintList(head);
 
-
-    void deleteNode(int nodeOffset) {
-        Node *temp1 = head, *temp2 = nullptr;
-        int ListLen = 0;
-
-        if (head == nullptr) {
-            cout << "List empty." << endl;
-            return;
-        }
-
-        while (temp1 != nullptr) {
-            temp1 = temp1->next;
-            ListLen++;
-        }
-
-        if (ListLen < nodeOffset) {
-            cout << "Index out of range" << endl;
-            return;
-        }
-
-        temp1 = head;
-
-        if (nodeOffset == 1) {
-            head = head->next;
-            delete temp1;
-            return;
-        }
-
-        while (nodeOffset-- > 1) {
-            temp2 = temp1;
-            temp1 = temp1->next;
-        }
-
-        temp2->next = temp1->next;
-        delete temp1;
-    }
-
-    int getLength() const {
-        int length = 0;
-        Node* temp = head;
-        while (temp != nullptr) {
-            length++;
-            temp = temp->next;
-        }
-        return length;
-    }
-};
-
-int main() {
-    LinkedList list;
-
-    int n;
-    cout << "Enter the number of elements: ";
-    cin >> n;
-
-    cout << "Enter the elements: ";
-    for (int i = 0; i < n; ++i) {
-        int element;
-        cin >> element;
-        list.insertNode(element);
-    }
-
-    cout << "Elements of the list are: ";
-    list.printList();
-
-    cout << "The length of the linked list is: " << list.getLength() << endl;
-
-    int position;
-    cout << "Enter the position of the node to delete: ";
-    cin >> position;
-
-    list.deleteNode(position);
-
-    cout << "Elements of the list after deletion are: ";
-    list.printList();
-
-    return 0;
+  return 0;
 }
